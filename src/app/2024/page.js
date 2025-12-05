@@ -37,7 +37,7 @@ export default function Photos2024() {
       const data = await res.json();
 
       // Append immediately
-      setImages((prev) => [...prev, ...data.images]);
+      setImages((prev) => [...prev, ...(data.images || [])]);
       setPage(pageNumber);
 
       // ⭐ Prefetch next batch
@@ -56,7 +56,7 @@ export default function Photos2024() {
       const data = await res.json();
 
       // ⭐ Preload and decode images early
-      data.images.forEach((url) => {
+      data.images?.forEach((url) => {
         const img = new Image();
         img.src = url; // browser downloads immediately
       });
@@ -93,7 +93,7 @@ export default function Photos2024() {
         const first = entries[0];
         if (first.isIntersecting && !loadingRef.current) {
           // ⭐ Use prefetched data instantly
-          if (prefetchCache.length > 0) {
+          if (prefetchCache?.length > 0) {
             flushPrefetchIntoImages();
             return;
           }
@@ -116,8 +116,15 @@ export default function Photos2024() {
   const closeDialog = () => setDialogOpen(false);
 
   return (
-    <div className="p-4 min-h-screen bg-gradient-to-b from-white to-blue-100 px-[10%] sm:px-[20%] py-[5%]">
-      <h1 className="text-2xl font-bold mb-4">2024 Photos</h1>
+    <div
+      className="
+    min-h-screen px-[10%] sm:px-[20%]
+    bg-[url('/images/bg.jpg')]
+    bg-repeat-y
+    bg-top
+  "
+    >
+      <h1 className="text-5xl font-bold mb-4 text-white p-5 pt-14">2024 Photos</h1>
 
       <div className="columns-2 sm:columns-3 lg:columns-4 gap-4">
         {images.map((src, index) => (
@@ -134,7 +141,7 @@ export default function Photos2024() {
 
       {/* ⭐ Invisible prerender container */}
       <div className="absolute opacity-0 h-0 w-0 overflow-hidden -z-50 pointer-events-none">
-        {prefetchCache.map((url, i) => (
+        {prefetchCache?.map((url, i) => (
           <img key={url + i} src={url} />
         ))}
       </div>

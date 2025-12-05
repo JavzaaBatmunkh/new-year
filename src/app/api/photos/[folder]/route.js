@@ -11,9 +11,9 @@ export async function GET(req, { params }) {
     const page = Number(searchParams.get("page") || 1);
     const limit = Number(searchParams.get("limit") || 30);
 
-    // const photosDir = path.join(process.cwd(), "public", "cdn", folder);
+    const photosDir = path.join(process.cwd(), "public", "cdn", folder);
 
-    const photosDir = `/srv/cdn/${folder}`;
+    // const photosDir = `/srv/cdn/${folder}`;
 
     if (!fs.existsSync(photosDir)) {
       return NextResponse.json({ error: "Folder not found" }, { status: 404 });
